@@ -14,7 +14,433 @@ export const botConfig = {
     status: "online",
 
     // Activity lines shown under the bot name.
-    // `type` number mapping from Discord:
+    // `type` number mapping from Discord:import { logger } from '../utils/logger.js';
+
+export const botConfig = {
+  // =========================
+  // ПРИСУТСТВИЕ БОТА (что видят пользователи под ником)
+  // =========================
+  presence: {
+    status: "online", // online | idle | dnd | invisible
+
+    // Активности, отображаемые под ником бота.
+    // type: 0 = Играет, 1 = Стримит, 2 = Слушает, 3 = Смотрит, 4 = Пользовательская, 5 = Соревнуется
+    activities: [
+      {
+        name: "Патрулирую", // для GTA RP
+        type: 0,
+      },
+    ],
+  },
+
+  // =========================
+  // ПОВЕДЕНИЕ КОМАНД
+  // =========================
+  commands: {
+    // ID владельцев бота (через запятую в OWNER_IDS)
+    owners: process.env.OWNER_IDS?.split(",") || [],
+
+    // Задержка между использованием команд (в секундах)
+    defaultCooldown: 3,
+
+    // Удалять старые команды перед перерегистрацией
+    deleteCommands: false,
+
+    // ID тестового сервера для быстрой публикации слеш-команд
+    testGuildId: process.env.TEST_GUILD_ID,
+
+    // Префикс для текстовых команд (например, "!" для "!ping")
+    prefix: process.env.PREFIX || "!",
+  },
+
+  // =========================
+  // СИСТЕМА ЗАЯВОК (APPLICATIONS)
+  // =========================
+  applications: {
+    // Стандартные вопросы при подаче заявки
+    defaultQuestions: [
+      { question: "Ваше имя?", required: true },
+      { question: "Сколько вам лет?", required: true },
+      { question: "Почему вы хотите присоединиться?", required: true },
+    ],
+
+    // Цвета эмбедов для разных статусов
+    statusColors: {
+      pending: "#FFA500",
+      approved: "#00FF00",
+      denied: "#FF0000",
+    },
+
+    // Ожидание перед новой заявкой (в часах)
+    applicationCooldown: 24,
+
+    // Автоудаление отклонённых заявок через N дней
+    deleteDeniedAfter: 7,
+
+    // Автоудаление одобренных заявок через N дней
+    deleteApprovedAfter: 30,
+
+    // Роли, которым разрешено управлять заявками
+    managerRoles: [],
+  },
+
+  // =========================
+  // ЦВЕТА И БРЕНДИНГ ЭМБЕДОВ
+  // =========================
+  embeds: {
+    colors: {
+      primary: "#336699",
+      secondary: "#2F3136",
+
+      success: "#57F287",
+      error: "#ED4245",
+      warning: "#FEE75C",
+      info: "#3498DB",
+
+      light: "#FFFFFF",
+      dark: "#202225",
+      gray: "#99AAB5",
+
+      blurple: "#5865F2",
+      green: "#57F287",
+      yellow: "#FEE75C",
+      fuchsia: "#EB459E",
+      red: "#ED4245",
+      black: "#000000",
+
+      giveaway: {
+        active: "#57F287",
+        ended: "#ED4245",
+      },
+      ticket: {
+        open: "#57F287",
+        claimed: "#FAA61A",
+        closed: "#ED4245",
+        pending: "#99AAB5",
+      },
+      economy: "#F1C40F",
+      birthday: "#E91E63",
+      moderation: "#9B59B6",
+
+      priority: {
+        none: "#95A5A6",
+        low: "#3498db",
+        medium: "#2ecc71",
+        high: "#f1c40f",
+        urgent: "#e74c3c",
+      },
+    },
+    footer: {
+      text: "Pollus", // имя бота
+      icon: null,
+    },
+    thumbnail: null,
+    author: {
+      name: null,
+      icon: null,
+      url: null,
+    },
+  },
+
+  // =========================
+  // ЭКОНОМИКА (адаптировано под GTA RP)
+  // =========================
+  economy: {
+    currency: {
+      name: "доллар",
+      namePlural: "долларов",
+      symbol: "$",
+    },
+
+    // Стартовый капитал для новых игроков
+    startingBalance: 5000,
+
+    // Максимальная сумма на банковском счёте (без апгрейдов)
+    baseBankCapacity: 100000,
+
+    // Ежедневная награда
+    dailyAmount: 500,
+
+    // Заработок за работу (случайное число от min до max)
+    workMin: 200,
+    workMax: 1000,
+
+    // Заработок попрошайничеством
+    begMin: 50,
+    begMax: 200,
+
+    // Шанс успеха при ограблении (0.3 = 30%)
+    robSuccessRate: 0.3,
+
+    // Время в тюрьме после провала (миллисекунды) – 1 час
+    robFailJailTime: 3600000,
+  },
+
+  // =========================
+  // МАГАЗИН (заглушка)
+  // =========================
+  shop: {
+    // Здесь можно добавить товары
+  },
+
+  // =========================
+  // ТИКЕТ-СИСТЕМА
+  // =========================
+  tickets: {
+    defaultCategory: null,
+    supportRoles: [],
+
+    // Приоритеты тикетов (перевод)
+    priorities: {
+      none: {
+        emoji: "⚪",
+        color: "#95A5A6",
+        label: "Нет",
+      },
+      low: {
+        emoji: "🟢",
+        color: "#2ECC71",
+        label: "Низкий",
+      },
+      medium: {
+        emoji: "🟡",
+        color: "#F1C40F",
+        label: "Средний",
+      },
+      high: {
+        emoji: "🔴",
+        color: "#E74C3C",
+        label: "Высокий",
+      },
+      urgent: {
+        emoji: "🚨",
+        color: "#E91E63",
+        label: "Срочный",
+      },
+    },
+
+    defaultPriority: "none",
+    archiveCategory: null,
+    logChannel: null,
+  },
+
+  // =========================
+  // РОЗЫГРЫШИ (GIVEAWAYS)
+  // =========================
+  giveaways: {
+    defaultDuration: 86400000, // 24 часа
+    minimumWinners: 1,
+    maximumWinners: 10,
+    minimumDuration: 300000, // 5 минут
+    maximumDuration: 2592000000, // 30 дней
+    allowedRoles: [],
+    bypassRoles: [],
+  },
+
+  // =========================
+  // ДНИ РОЖДЕНИЯ
+  // =========================
+  birthday: {
+    defaultRole: null,
+    announcementChannel: null,
+    timezone: "UTC",
+  },
+
+  // =========================
+  // ВЕРИФИКАЦИЯ
+  // =========================
+  verification: {
+    defaultMessage: "Нажмите на кнопку ниже, чтобы пройти верификацию и получить доступ к серверу!",
+
+    defaultButtonText: "Верифицироваться",
+
+    autoVerify: {
+      defaultCriteria: "none", // none | account_age | server_size
+      defaultAccountAgeDays: 7,
+      serverSizeThreshold: 1000,
+      minAccountAge: 1,
+      maxAccountAge: 365,
+      sendDMNotification: true,
+      criteria: {
+        account_age: "Аккаунт должен быть старше указанного количества дней",
+        server_size: "Все пользователи, если на сервере меньше 1000 участников",
+        none: "Все пользователи сразу"
+      }
+    },
+
+    verificationCooldown: 5000, // 5 секунд
+    maxVerificationAttempts: 3,
+    attemptWindow: 60000, // 1 минута
+    maxCooldownEntries: 10000,
+    maxAttemptEntries: 10000,
+    cooldownCleanupInterval: 300000, // 5 минут
+    maxAuditMetadataBytes: 4096,
+    maxInMemoryAuditEntries: 1000,
+    logAllVerifications: true,
+    keepAuditTrail: true,
+  },
+
+  // =========================
+  // ПРИВЕТСТВИЯ / ПРОЩАНИЯ
+  // =========================
+  welcome: {
+    defaultWelcomeMessage: "Добро пожаловать {user} на сервер {server}! Теперь нас {memberCount}!",
+    defaultGoodbyeMessage: "{user} покинул сервер. Теперь нас {memberCount}.",
+    defaultWelcomeChannel: null,
+    defaultGoodbyeChannel: null,
+  },
+
+  // =========================
+  // СЧЁТЧИКИ (COUNTERS)
+  // =========================
+  counters: {
+    defaults: {
+      name: "Счётчик {name}",
+      description: "Счётчик {name} на сервере",
+      type: "voice",
+      channelName: "{name}-{count}",
+    },
+    permissions: {
+      deny: ["VIEW_CHANNEL"],
+      allow: ["VIEW_CHANNEL", "CONNECT", "SPEAK"],
+    },
+    messages: {
+      created: "✅ Создан счётчик **{name}**",
+      deleted: "🗑️ Удалён счётчик **{name}**",
+      updated: "🔄 Обновлён счётчик **{name}**",
+    },
+    types: {
+      members: {
+        name: "👥 Участники",
+        description: "Всего участников на сервере",
+        getCount: (guild) => guild.memberCount.toString(),
+      },
+      bots: {
+        name: "🤖 Боты",
+        description: "Всего ботов на сервере",
+        getCount: (guild) =>
+          guild.members.cache.filter((m) => m.user.bot).size.toString(),
+      },
+      members_only: {
+        name: "👤 Люди",
+        description: "Всего людей (не-ботов) на сервере",
+        getCount: (guild) =>
+          guild.members.cache.filter((m) => !m.user.bot).size.toString(),
+      },
+    },
+  },
+
+  // =========================
+  // ОБЩИЕ СООБЩЕНИЯ БОТА (перевод)
+  // =========================
+  messages: {
+    noPermission: "У вас нет прав для использования этой команды.",
+    cooldownActive: "Подождите {time} перед повторным использованием команды.",
+    errorOccurred: "Произошла ошибка при выполнении команды.",
+    missingPermissions: "У бота недостаточно прав для выполнения этого действия.",
+    commandDisabled: "Эта команда отключена.",
+    maintenanceMode: "Бот находится в режиме технического обслуживания.",
+  },
+
+  // =========================
+  // ВКЛЮЧЕНИЕ/ОТКЛЮЧЕНИЕ МОДУЛЕЙ
+  // =========================
+  features: {
+    economy: true,
+    leveling: true,
+    moderation: true,
+    logging: true,
+    welcome: true,
+    tickets: true,
+    giveaways: true,
+    birthday: true,
+    counter: true,
+    verification: true,
+    reactionRoles: true,
+    joinToCreate: true,
+    voice: true,
+    search: true,
+    tools: true,
+    utility: true,
+    community: true,
+    fun: true,
+  },
+};
+
+// =========================
+// ВАЛИДАЦИЯ И ЭКСПОРТ
+// =========================
+export function validateConfig(config) {
+  const errors = [];
+
+  if (process.env.NODE_ENV !== 'production') {
+    logger.debug('Проверка переменных окружения:');
+    logger.debug('DISCORD_TOKEN существует:', !!process.env.DISCORD_TOKEN);
+    logger.debug('TOKEN существует:', !!process.env.TOKEN);
+    logger.debug('CLIENT_ID существует:', !!process.env.CLIENT_ID);
+    logger.debug('GUILD_ID существует:', !!process.env.GUILD_ID);
+    logger.debug('POSTGRES_HOST существует:', !!process.env.POSTGRES_HOST);
+    logger.debug('NODE_ENV:', process.env.NODE_ENV);
+  }
+
+  if (!process.env.DISCORD_TOKEN && !process.env.TOKEN) {
+    errors.push("Требуется токен бота (переменная DISCORD_TOKEN или TOKEN)");
+  }
+
+  if (!process.env.CLIENT_ID) {
+    errors.push("Требуется ID клиента (переменная CLIENT_ID)");
+  }
+
+  if (process.env.NODE_ENV === 'production') {
+    if (!process.env.POSTGRES_HOST) {
+      errors.push("В продакшене требуется хост PostgreSQL (переменная POSTGRES_HOST)");
+    }
+    if (!process.env.POSTGRES_USER) {
+      errors.push("В продакшене требуется пользователь PostgreSQL (переменная POSTGRES_USER)");
+    }
+    if (!process.env.POSTGRES_PASSWORD) {
+      errors.push("В продакшене требуется пароль PostgreSQL (переменная POSTGRES_PASSWORD)");
+    }
+  }
+
+  return errors;
+}
+
+const configErrors = validateConfig(botConfig);
+if (configErrors.length > 0) {
+  logger.error("Ошибки конфигурации бота:", configErrors.join("\n"));
+  if (process.env.NODE_ENV === "production") {
+    process.exit(1);
+  }
+}
+
+export const BotConfig = botConfig;
+
+export function getColor(path, fallback = "#99AAB5") {
+  if (typeof path === "number") return path;
+  if (typeof path === "string" && path.startsWith("#")) {
+    return parseInt(path.replace("#", ""), 16);
+  }
+  const result = path
+    .split(".")
+    .reduce(
+      (obj, key) => (obj && obj[key] !== undefined ? obj[key] : fallback),
+      botConfig.embeds.colors,
+    );
+  if (typeof result === "string" && result.startsWith("#")) {
+    return parseInt(result.replace("#", ""), 16);
+  }
+  return result;
+}
+
+export function getRandomColor() {
+  const colors = Object.values(botConfig.embeds.colors).flatMap((color) =>
+    typeof color === "string" ? color : Object.values(color),
+  );
+  return colors[Math.floor(Math.random() * colors.length)];
+}
+
+export default botConfig;
     // 0 = Playing
     // 1 = Streaming
     // 2 = Listening
